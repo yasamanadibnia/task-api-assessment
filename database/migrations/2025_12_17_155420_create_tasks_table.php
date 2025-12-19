@@ -5,7 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -13,14 +14,16 @@ return new class extends Migration {
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('title', 256);
             $table->string('description', 500)->nullable();
-            $table->string('status')->default('todo');
-            if (DB::getDriverName() !== 'sqlite') {
-                $table->fullText('status');
-            }
-            $table->timestamp('du_date')->index();
+            $table->enum('status', \App\Enums\TaskStatus::values())->index();
+            $table->date('due_date')->index();
             $table->timestamps();
+
+            if (DB::getDriverName() !== 'sqlite') {
+                $table->fullText(['title', 'description']);
+            }
         });
     }
 

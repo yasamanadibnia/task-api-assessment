@@ -2,23 +2,28 @@
 
 namespace App\Services;
 
-use Illuminate\Validation\ValidationException;
+use App\Models\User;
 use App\Repositories\AuthRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class AuthService
 {
     public function __construct(
-        private readonly AuthRepository $authRepository
-    ) {
-    }
+        private AuthRepository $authRepository
+    ) {}
 
+    /**
+     * find by email user and give token.
+     *
+     * @throws ValidationException
+     */
     public function login(array $credentials): array
     {
         if (
-            !Auth::attempt([
-            'email' => $credentials['email'],
-            'password' => $credentials['password'],
+            ! Auth::attempt([
+                'email' => $credentials['email'],
+                'password' => $credentials['password'],
             ])
         ) {
             throw ValidationException::withMessages([
@@ -31,6 +36,9 @@ class AuthService
         return $this->buildAuthResponse($user);
     }
 
+    /**
+     * register user and give token.
+     */
     public function register(array $data): array
     {
         $user = $this->authRepository->create($data);
@@ -38,7 +46,10 @@ class AuthService
         return $this->buildAuthResponse($user);
     }
 
-    private function buildAuthResponse($user): array
+    /**
+     * return auth response data.
+     */
+    private function buildAuthResponse(User $user): array
     {
         return [
             'user' => $user,

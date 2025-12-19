@@ -2,16 +2,12 @@
 
 namespace Tests\Feature\Controllers;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Tests\TestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 class AuthControllerTest extends TestCase
 {
-
-    #[Test]
-    public function can_register_user()
+    public function test_user_can_register()
     {
         $password = 'secret123';
         $data = [
@@ -30,8 +26,7 @@ class AuthControllerTest extends TestCase
         ]);
     }
 
-    #[Test]
-    public function can_login_user()
+    public function test_user_can_login()
     {
         $password = 'secret123';
 

@@ -8,7 +8,6 @@ use Response;
 
 /**
  * Class ApiController
- * @package App\Modules\Api\Lesson\Controllers
  */
 trait ApiResponse
 {
@@ -26,7 +25,6 @@ trait ApiResponse
     }
 
     /**
-     * @param $statusCode
      * @return void response
      */
     public function setStatusCode($statusCode)
@@ -44,13 +42,11 @@ trait ApiResponse
             'status' => 'success',
             'status_code' => Res::HTTP_CREATED,
             'message' => $message,
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
     /**
-     * @param Paginator $paginate
-     * @param $data
      * @return mixed
      */
     protected function respondWithPagination(Paginator $paginate, $data, $message)
@@ -61,13 +57,14 @@ trait ApiResponse
                 'total_pages' => ceil($paginate->total() / $paginate->perPage()),
                 'current_page' => $paginate->currentPage(),
                 'limit' => $paginate->perPage(),
-            ]
+            ],
         ]);
+
         return $this->respond([
             'status' => 'success',
             'status_code' => Res::HTTP_OK,
             'message' => $message,
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
@@ -112,7 +109,7 @@ trait ApiResponse
             'status' => 'error',
             'status_code' => Res::HTTP_UNPROCESSABLE_ENTITY,
             'message' => $message,
-            'data' => $errors
+            'data' => $errors,
         ]);
     }
 
@@ -134,7 +131,7 @@ trait ApiResponse
         ]);
     }
 
-    public function respondErrorWithCode($code,$message = '',$data=null)
+    public function respondErrorWithCode($code, $message = '', $data = null)
     {
         if ($message == '' || is_null($message)) {
             $message = 'The operation encountered an error.';
@@ -144,19 +141,21 @@ trait ApiResponse
             'status' => 'error',
             'status_code' => $code,
             'message' => $message,
-            'data' => $data
+            'data' => $data,
         ]);
     }
+
     public function respondSuccess($message = '', $data = null)
     {
         if ($message == '' || is_null($message)) {
             $message = 'The operation was successful.';
         }
+
         return $this->respond([
             'status' => 'success',
             'status_code' => Res::HTTP_OK,
             'message' => $message,
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

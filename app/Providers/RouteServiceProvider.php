@@ -11,9 +11,7 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void
-    {
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap any application services.
@@ -33,7 +31,7 @@ class RouteServiceProvider extends ServiceProvider
 
         // Login throttling: 5 attempts per minute per email+IP
         RateLimiter::for('login', function ($request) {
-            return Limit::perMinute(5)->by($request->input('email') . '|' . $request->ip());
+            return Limit::perMinute(5)->by($request->input('email').'|'.$request->ip());
         });
 
         // Register throttling: 3 attempts per 10 minutes per IP
