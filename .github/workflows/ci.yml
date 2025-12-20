@@ -1,0 +1,85 @@
+name: Laravel CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: taskmanager
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      APP_ENV: testing
+      APP_KEY: base64:xNMEcEGNP9ChAFO5L7rze8CoOikjBlp+f9SSR80Jq9I=
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: taskmanager
+      DB_USERNAME: root
+      DB_PASSWORD: secret
+      CACHE_DRIVER: redis
+      QUEUE_CONNECTION: redis
+      REDIS_HOST: 127.0.0.1
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo_mysql, redis, bcmath
+          coverage: xdebug
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --optimize-autoloader
+
+      - name: Prepare app
+        run: |
+          php artisan key:generate
+          php artisan config:clear
+          php artisan cache:clear
+
+      - name: Run migrations
+        run: php artisan migrate --force
+
+      - name: Run tests with coverage
+        run: php artisan test --coverage --min=70
+
+      - name: Run phpmd
+        run: vendor/bin/phpmd app text cleancode,codesize,controversial,design,naming,unusedcode
+
+      - name: Static analysis
+        run: vendor/bin/phpstan analyse --level=max --memory-limit=1G
+
+      - name: Code style
+        run: vendor/bin/pint --test
+
+      - name: Security audit
+        run: composer audit

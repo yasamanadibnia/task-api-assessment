@@ -24,6 +24,52 @@ I also wrote unit tests for core services and repositories to ensure correctness
 
 Overall, the goal was to build a well-structured, maintainable backend demonstrating thoughtful architecture, proper use of Laravel features, and best practices in testing and deployment.
 
+📝CI & DevOps Summary
+
+The project implements a production-aware CI pipeline via GitHub Actions, balancing correctness, clarity, and speed, tailored for coding assessments.
+
+Pipeline Structure
+
+Split into independent jobs: Tests & Coverage, Static Analysis, Code Style, Security Audit, Docker Validation
+
+Benefits: failure isolation, parallel execution, and easier debugging
+
+Testing & Coverage
+
+Runs automated tests with MySQL and Redis
+
+Executes database migrations during CI
+
+Enforces minimum 70% code coverage, failing builds if not met
+
+Static Analysis & Code Style
+
+PHPStan (max level) for architecture and type checks
+
+Laravel Pint and PHPCS (PSR-12) for consistent code style
+
+Fail-fast policy to prevent low-quality code merges
+
+Security
+
+composer audit checks for dependency vulnerabilities
+
+No hard-coded secrets; environment values are test-scoped
+
+Docker & Environment Parity
+
+Docker and docker-compose validated in CI
+
+Builds ensure runtime compatibility and parity across local, CI, and production-like environments
+
+Trade-offs
+
+Queue workers not continuously run; queue behavior tested via integration tests
+
+Coverage enforced but not uploaded to external services to keep CI lightweight
+
+Overall
+The CI pipeline mirrors real-world production practices while remaining suitable for focused coding assessments.
 
 ----------
 
