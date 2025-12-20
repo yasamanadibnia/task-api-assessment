@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Repositories\AuthRepository;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Mockery\Exception;
 
 class AuthService
 {
@@ -21,14 +21,17 @@ class AuthService
     public function login(array $credentials): User
     {
         if (
-            ! Auth::attempt([
+            ! auth()->attempt([
                 'email' => $credentials['email'],
                 'password' => $credentials['password'],
             ])
         ) {
-            throw ValidationException::withMessages([
-                'email' => ['Invalid credentials'],
-            ]);
+            throw new Exception(
+                response: response()->json([
+                    'message' => 'Invalid credentials',
+                    'errors' => ['email' => ['Invalid email or password']],
+                ], 422)
+            );
         }
 
         $user = $this->authRepository->findByEmail($credentials['email']);

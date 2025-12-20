@@ -15,10 +15,9 @@ class ProjectResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'user' => UserResource::make($this->whenLoaded('user')),
+            'user' => $this->whenLoaded('user') ? (new UserResource($this->user))->toArray(request()) : null,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
         ];

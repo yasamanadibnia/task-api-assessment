@@ -42,16 +42,16 @@ class TaskService
     /**
      * Update task.
      */
-    public function update(array $data, int $id): Model
+    public function update(array $data, int $taskId): Model
     {
-        return $this->taskRepository->update($id, $data);
+        return $this->taskRepository->update($taskId, $data);
     }
 
     /**
      * Delete task.
      */
-    public function delete(int $id): bool
+    public function delete(int $taskId): bool
     {
-        return $this->taskRepository->delete($id);
+        return $this->taskRepository->delete($taskId);
     }
 }

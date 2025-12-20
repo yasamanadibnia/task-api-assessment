@@ -39,8 +39,7 @@ trait ApiResponse
         }
 
         return $this->respond([
-            'status' => 'success',
-            'status_code' => Res::HTTP_CREATED,
+            'status' => Res::HTTP_CREATED,
             'message' => $message,
             'data' => $data,
         ]);
@@ -61,8 +60,7 @@ trait ApiResponse
         ]);
 
         return $this->respond([
-            'status' => 'success',
-            'status_code' => Res::HTTP_OK,
+            'status' => Res::HTTP_OK,
             'message' => $message,
             'data' => $data,
         ]);
@@ -71,8 +69,7 @@ trait ApiResponse
     public function respondNotFound($message = 'Not Found!')
     {
         return $this->respond([
-            'status' => 'error',
-            'status_code' => Res::HTTP_NOT_FOUND,
+            'status' => Res::HTTP_NOT_FOUND,
             'message' => $message,
         ]);
     }
@@ -80,8 +77,7 @@ trait ApiResponse
     public function respondForbidden($message = 'Access Denied!')
     {
         return $this->respond([
-            'status' => 'error',
-            'status_code' => Res::HTTP_FORBIDDEN,
+            'status' => Res::HTTP_FORBIDDEN,
             'message' => $message,
         ]);
     }
@@ -93,8 +89,7 @@ trait ApiResponse
         }
 
         return $this->respond([
-            'status' => 'error',
-            'status_code' => Res::HTTP_INTERNAL_SERVER_ERROR,
+            'status' => Res::HTTP_INTERNAL_SERVER_ERROR,
             'message' => $message,
         ]);
     }
@@ -106,8 +101,7 @@ trait ApiResponse
         }
 
         return $this->respond([
-            'status' => 'error',
-            'status_code' => Res::HTTP_UNPROCESSABLE_ENTITY,
+            'status' => Res::HTTP_UNPROCESSABLE_ENTITY,
             'message' => $message,
             'data' => $errors,
         ]);
@@ -125,8 +119,7 @@ trait ApiResponse
         }
 
         return $this->respond([
-            'status' => 'error',
-            'status_code' => $this->getStatusCode(),
+            'status' => $this->getStatusCode(),
             'message' => $message,
         ]);
     }
@@ -138,8 +131,7 @@ trait ApiResponse
         }
 
         return $this->respond([
-            'status' => 'error',
-            'status_code' => $code,
+            'status' => $code,
             'message' => $message,
             'data' => $data,
         ]);
@@ -152,8 +144,7 @@ trait ApiResponse
         }
 
         return $this->respond([
-            'status' => 'success',
-            'status_code' => Res::HTTP_OK,
+            'status' => Res::HTTP_OK,
             'message' => $message,
             'data' => $data,
         ]);

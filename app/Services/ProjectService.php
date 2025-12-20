@@ -41,16 +41,16 @@ class ProjectService
     /**
      * Update project.
      */
-    public function update(array $data, int $id): Model
+    public function update(array $data, int $projectId): Model
     {
-        return $this->projectRepository->update($id, $data);
+        return $this->projectRepository->update($projectId, $data);
     }
 
     /**
      * Delete project.
      */
-    public function delete(int $id): bool
+    public function delete(int $projectId): bool
     {
-        return $this->projectRepository->delete($id);
+        return $this->projectRepository->delete($projectId);
     }
 }

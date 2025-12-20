@@ -16,7 +16,7 @@ interface BaseRepository
     /**
      * Find resource.
      */
-    public function find(int $id): ?Model;
+    public function find(int $modeId): ?Model;
 
     /**
      * Find all resources.
@@ -31,10 +31,10 @@ interface BaseRepository
     /**
      * Update existing resource.
      */
-    public function update(int $id, array $data): Model;
+    public function update(int $modeId, array $data): Model;
 
     /**
      * Delete existing resource.
      */
-    public function delete(int $id): bool;
+    public function delete(int $modeId): bool;
 }

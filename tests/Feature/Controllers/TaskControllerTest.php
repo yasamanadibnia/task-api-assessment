@@ -22,16 +22,13 @@ class TaskControllerTest extends TestCase
         ]);
 
         Comment::factory()->count(10)->create([
-            'task_id' => $tasks->first()->id
+            'task_id' => $tasks->first()->id,
         ]);
         $response = $this->getJson('/api/tasks');
 
-        $response
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                'success',
-                'data',
-            ]);
+        $response->assertJson([
+            'status' => 200,
+        ])->assertJsonStructure(['data']);
     }
 
     public function test_user_can_filter_tasks_by_status()
@@ -99,8 +96,9 @@ class TaskControllerTest extends TestCase
             'title' => 'Invalid Task',
             'status' => 'invalid-status',
         ]);
-
-        $response->assertStatus(422);
+        $response->assertJson([
+            'status' => 422,
+        ]);
     }
 
     /* ---------------------------------------------------

@@ -9,7 +9,6 @@ use App\Services\AuthService;
 use App\Traits\ApiResponse;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Response;
 
 class AuthController extends Controller
 {
@@ -25,12 +24,14 @@ class AuthController extends Controller
         try {
             $userData = $this->authService->login($request->validated());
             if (! $userData) {
-                return Response::error();
+                return $this->respondInternalError();
             }
 
-            return Response::success(data: UserResource::make($userData));
+            return $this->respondSuccess(
+                data: (new UserResource($userData))->toArray(request())
+            );
         } catch (Exception $exception) {
-            return Response::error();
+            return $this->respondInternalError();
         }
     }
 
@@ -42,9 +43,11 @@ class AuthController extends Controller
         try {
             $userData = $this->authService->register($request->validated());
 
-            return Response::success(data: UserResource::make($userData));
+            return $this->respondSuccess(
+                data: (new UserResource($userData))->toArray(request())
+            );
         } catch (Exception $exception) {
-            return Response::error();
+            return $this->respondInternalError();
         }
     }
 }

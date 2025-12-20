@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Services\NotificationService;
+use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Response;
 
 class NotificationController extends Controller
 {
+    use ApiResponse;
+
     public function __construct(
         protected NotificationService $service
     ) {}
@@ -17,7 +19,7 @@ class NotificationController extends Controller
      */
     public function unseen(): JsonResponse
     {
-        return Response::success(
+        return $this->respondSuccess(
             data: $this->service->unseen()
         );
     }
@@ -25,11 +27,11 @@ class NotificationController extends Controller
     /**
      * mark user comment as seen.
      */
-    public function markAsSeen(string $id): JsonResponse
+    public function markAsSeen(string $notificationId): JsonResponse
     {
-        $this->service->markAsSeen($id);
+        $this->service->markAsSeen($notificationId);
 
-        return Response::success(
+        return $this->respondSuccess(
             message: __('notification_marked_as_seen')
         );
     }

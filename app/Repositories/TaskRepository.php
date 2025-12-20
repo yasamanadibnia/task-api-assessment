@@ -26,16 +26,16 @@ class TaskRepository implements BaseRepository
      */
     public function all(): LengthAwarePaginator
     {
-        return $this->model->with(['user','comments'])->filter()->paginate(10);
+        return $this->model->with(['user', 'comments'])->filter()->paginate(10);
     }
 
     /**
      * Find a task by id for authenticated user.
      */
-    public function find(int $id): ?Model
+    public function find(int $taskId): ?Model
     {
         return $this->model
-            ->where('id', $id)
+            ->where('id', $taskId)
             ->where('user_id', auth()->id())
             ->first();
     }
@@ -51,10 +51,10 @@ class TaskRepository implements BaseRepository
     /**
      * Update an existing task.
      */
-    public function update(int $id, array $data): Model
+    public function update(int $taskId, array $data): Model
     {
         $task = $this->model
-            ->where('id', $id)
+            ->where('id', $taskId)
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
@@ -66,10 +66,10 @@ class TaskRepository implements BaseRepository
     /**
      * Delete a task.
      */
-    public function delete(int $id): bool
+    public function delete(int $taskId): bool
     {
         return (bool) $this->model
-            ->where('id', $id)
+            ->where('id', $taskId)
             ->where('user_id', auth()->id())
             ->delete();
     }

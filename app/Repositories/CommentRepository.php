@@ -21,12 +21,10 @@ class CommentRepository implements BaseRepository
 
     /**
      * Find resource.
-     *
-     * @param  int  $id
      */
-    public function find($id): ?Model
+    public function find(int $commentId): ?Model
     {
-        return $this->model->find($id);
+        return $this->model->find($commentId);
     }
 
     /**
@@ -40,10 +38,10 @@ class CommentRepository implements BaseRepository
     /**
      * Update existing resource.
      */
-    public function update(int $id, array $data): Model
+    public function update(int $commentId, array $data): Model
     {
         $comment = $this->model
-            ->where('id', $id)
+            ->where('id', $commentId)
             ->where('user_id', auth()->id())
             ->where('task_id', request('task_id'))
             ->firstOrFail();
@@ -55,11 +53,9 @@ class CommentRepository implements BaseRepository
 
     /**
      * Delete existing resource.
-     *
-     * @param  int  $id
      */
-    public function delete($id): bool
+    public function delete(int $commentId): bool
     {
-        return $this->model->find($id)->delete();
+        return $this->model->find($commentId)->delete();
     }
 }

@@ -22,6 +22,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        Task::observe(TaskObserver::class);
+        (new Task)->observe(TaskObserver::class);
     }
 }

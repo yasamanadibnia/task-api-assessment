@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Services\ProjectService;
+use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Response;
 
 /**
  * Class ProjectController
@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Response;
  */
 class ProjectController extends Controller
 {
+    use ApiResponse;
+
     /**
      * ProjectController constructor.
      */
@@ -29,9 +31,13 @@ class ProjectController extends Controller
     {
         $projects = $this->projectService->index();
 
-        return Response::success(
+        $data = $projects->map(
+            fn ($project) => (new ProjectResource($project))->toArray(request())
+        );
+
+        return $this->respondSuccess(
             message: __('fetched_successfully'),
-            data: ProjectResource::collection($projects)
+            data: $data
         );
     }
 
@@ -42,32 +48,34 @@ class ProjectController extends Controller
     {
         $project = $this->projectService->create($request->validated());
 
-        return Response::success(
+        return $this->respondSuccess(
             message: __('created_successfully'),
-            data: ProjectResource::make($project)
+            data: (new ProjectResource($project))->toArray(request())
         );
     }
 
     /**
      * Update the specified project.
      */
-    public function update(ProjectRequest $request, int $id): JsonResponse
+    public function update(ProjectRequest $request, int $projectId): JsonResponse
     {
-        $project = $this->projectService->update($request->validated(), $id);
+        $project = $this->projectService->update($request->validated(), $projectId);
 
-        return Response::success(
+        return $this->respondSuccess(
             message: __('updated_successfully'),
-            data: ProjectResource::make($project)
+            data: (new ProjectResource($project))->toArray(request())
         );
     }
 
     /**
      * Remove the specified project.
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $projectId): JsonResponse
     {
-        $this->projectService->delete($id);
+        $this->projectService->delete($projectId);
 
-        return Response::success(__('deleted_successfully'));
+        return $this->respondSuccess(
+            message: __('deleted_successfully')
+        );
     }
 }

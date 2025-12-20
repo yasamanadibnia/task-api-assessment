@@ -3,12 +3,13 @@
 namespace App\Repositories;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Contracts\Hashing\Hasher;
 
 class AuthRepository
 {
     public function __construct(
-        private readonly User $model
+        private readonly User $model,
+        protected Hasher $hasher
     ) {}
 
     public function create(array $data): User
@@ -16,7 +17,7 @@ class AuthRepository
         return $this->model->create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'password' => $this->hasher->make($data['password']),
         ]);
     }
 

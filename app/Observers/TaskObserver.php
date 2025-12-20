@@ -11,12 +11,12 @@ class TaskObserver
     /** * Handle the Task "created" event. */
     public function created(Task $task): void
     {
-        app(NotificationService::class)->notifyTask(user: $task->user, type: NotificationType::TASK_ASSIGNED, taskId: $task->id, message: "You have been assigned task: {$task->title}");
+        (new NotificationService)->notifyTask(user: $task->user, type: NotificationType::TASK_ASSIGNED, taskId: $task->id, message: "You have been assigned task: {$task->title}");
     }
 
     /** * Handle the Task "updated" event. */
     public function updated(Task $task): void
     {
-        app(NotificationService::class)->notifyTask(user: $task->user, type: NotificationType::TASK_UPDATED, taskId: $task->id, message: "Your task have been updated: {$task->title}");
+        (new NotificationService)->notifyTask(user: $task->user, type: NotificationType::TASK_UPDATED, taskId: $task->id, message: "Your task have been updated: {$task->title}");
     }
 }

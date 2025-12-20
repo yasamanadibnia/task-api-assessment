@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CommentRequest;
 use App\Http\Resources\CommentResource;
 use App\Services\CommentService;
+use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Response;
 
 /**
  * Class CommentController
@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Response;
  */
 class CommentController extends Controller
 {
+    use ApiResponse;
+
     /**
      * CommentController constructor.
      */
@@ -29,9 +31,13 @@ class CommentController extends Controller
     {
         $comments = $this->commentService->index();
 
-        return Response::success(
+        $data = $comments->map(
+            fn ($comment) => (new CommentResource($comment))->toArray(request())
+        );
+
+        return $this->respondSuccess(
             message: __('fetched_successfully'),
-            data: CommentResource::collection($comments)
+            data: $data
         );
     }
 
@@ -42,32 +48,34 @@ class CommentController extends Controller
     {
         $comment = $this->commentService->create($request->validated());
 
-        return Response::success(
+        return $this->respondSuccess(
             message: __('created_successfully'),
-            data: CommentResource::make($comment)
+            data: (new CommentResource($comment))->toArray(request())
         );
     }
 
     /**
      * Update the specified comment.
      */
-    public function update(CommentRequest $request, int $id): JsonResponse
+    public function update(CommentRequest $request, int $commentId): JsonResponse
     {
-        $comment = $this->commentService->update($request->validated(), $id);
+        $comment = $this->commentService->update($request->validated(), $commentId);
 
-        return Response::success(
+        return $this->respondSuccess(
             message: __('updated_successfully'),
-            data: CommentResource::make($comment)
+            data: (new CommentResource($comment))->toArray(request())
         );
     }
 
     /**
      * Remove the specified comment.
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $commentId): JsonResponse
     {
-        $this->commentService->delete($id);
+        $this->commentService->delete($commentId);
 
-        return Response::success(__('deleted_successfully'));
+        return $this->respondSuccess(
+            message: __('deleted_successfully')
+        );
     }
 }

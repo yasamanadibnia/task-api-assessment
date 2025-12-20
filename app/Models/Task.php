@@ -59,11 +59,8 @@ class Task extends Model
     {
         return $query
             ->where('user_id', auth()->id())
-            ->when(request('status'), fn ($q) => $q->where('status', request('status'))
-            )
-            ->when(request('due_date'), fn ($q) => $q->whereDate('due_date', request('due_date'))
-            )
-            ->when(request('search'), fn ($q) => $q->whereFullText(['title', 'description'], request('search'))
-            );
+            ->when(request('status'), fn ($q) => $q->where('status', request('status')))
+            ->when(request('due_date'), fn ($q) => $q->whereDate('due_date', request('due_date')))
+            ->when(request('search'), fn ($q) => $q->whereFullText(['title', 'description'], request('search')));
     }
 }

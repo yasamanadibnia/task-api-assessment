@@ -19,11 +19,12 @@ class TaskResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'status' => $this->status,
-            'user' => UserResource::make($this->whenLoaded('user')),
-            'comments' => CommentResource::collection($this->whenLoaded('comments')),
-            'du_date' => $this->created_at->toDateTimeString(),
+            'user' => $this->whenLoaded('user') ? (new UserResource($this->user))->toArray(request()) : null,
+            'comments' => $this->whenLoaded('comments')
+                ? $this->comments->map(fn ($comment) => (new CommentResource($comment))->toArray(request()))
+                : [],
+            'due_date' => $this->due_date?->toDateTimeString(),
             'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at->toDateTimeString(),
-        ];
+            'updated_at' => $this->updated_at->toDateTimeString(),   ];
     }
 }

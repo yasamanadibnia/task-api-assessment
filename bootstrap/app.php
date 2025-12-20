@@ -1,11 +1,11 @@
 <?php
 
-use App\Exceptions\Handler;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
 
-$app = Application::configure(basePath: dirname(__DIR__))
+return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         api: __DIR__.'/../routes/api.php',
@@ -15,14 +15,36 @@ $app = Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         //
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        //
+    ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->render(function (Throwable $e, Request $request) {
+            // Get the exception class name
+            $className = get_class($e);
+
+            // Get our custom handlers
+            $handlers = App\Exceptions\ApiExceptionHandler::$handlers;
+
+            // Check if we have a specific handler for this exception
+            if (array_key_exists($className, $handlers)) {
+                $method = $handlers[$className];
+                $apiHandler = new App\Exceptions\ApiExceptionHandler;
+
+                return $apiHandler->$method($e, $request);
+            }
+
+            return response()->json([
+                'status' => 'error',
+                'status_code' => $e->getCode() ?: 500,
+                'message' => $e->getMessage() ?: 'An unexpected error occurred',
+                'data' => [
+                    'type' => basename(get_class($e)),
+                    'timestamp' => now()->toISOString(),
+                    // Include debug info only in non-production environments
+                    'debug' => app()->environment('local', 'testing') ? [
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine(),
+                        'trace' => $e->getTraceAsString(),
+                    ] : null,
+                ],
+            ], $e->getCode() ?: 500);
+        });
     })->create();
-
-// Bind your custom exception handler directly in the container
-$app->singleton(
-    \Illuminate\Contracts\Debug\ExceptionHandler::class,
-    Handler::class
-);
-
-return $app;

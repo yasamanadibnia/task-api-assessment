@@ -36,6 +36,6 @@ class NotificationControllerTest extends TestCase
         $response = $this->getJson(route('notifications.unseen'));
 
         $response->assertOk()
-            ->assertJsonStructure(['success', 'data']);
+            ->assertJsonStructure(['data']);
     }
 }

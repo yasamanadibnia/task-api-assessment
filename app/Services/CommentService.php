@@ -41,16 +41,16 @@ class CommentService
     /**
      * Update comment.
      */
-    public function update(array $data, int $id): Model
+    public function update(array $data, int $commentId): Model
     {
-        return $this->commentRepository->update($id, $data);
+        return $this->commentRepository->update($commentId, $data);
     }
 
     /**
      * Delete comment.
      */
-    public function delete(int $id): bool
+    public function delete(int $commentId): bool
     {
-        return $this->commentRepository->delete($id);
+        return $this->commentRepository->delete($commentId);
     }
 }

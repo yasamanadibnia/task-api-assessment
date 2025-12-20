@@ -34,10 +34,10 @@ class ProjectRepository implements BaseRepository
     /**
      * Find a project by id for authenticated user.
      */
-    public function find(int $id): ?Model
+    public function find(int $projectId): ?Model
     {
         return $this->model
-            ->where('id', $id)
+            ->where('id', $projectId)
             ->where('user_id', auth()->id())
             ->first();
     }
@@ -53,10 +53,10 @@ class ProjectRepository implements BaseRepository
     /**
      * Update an existing project.
      */
-    public function update(int $id, array $data): Model
+    public function update(int $projectId, array $data): Model
     {
         $project = $this->model
-            ->where('id', $id)
+            ->where('id', $projectId)
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
@@ -68,10 +68,10 @@ class ProjectRepository implements BaseRepository
     /**
      * Delete a project.
      */
-    public function delete(int $id): bool
+    public function delete(int $projectId): bool
     {
         return (bool) $this->model
-            ->where('id', $id)
+            ->where('id', $projectId)
             ->where('user_id', auth()->id())
             ->delete();
     }

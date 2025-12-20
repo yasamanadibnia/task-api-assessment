@@ -36,8 +36,9 @@ class CommentControllerTest extends TestCase
 
         $response = $this->getJson(route('comments.index', ['task_id' => $comment->task_id]));
 
-        $response->assertStatus(200)
-            ->assertJsonStructure(['success', 'data' => [['id', 'task_id', 'user_id', 'body']]]);
+        $response->assertJson([
+            'status' => 200,
+        ])->assertJsonStructure(['data' => [['id', 'task_id', 'user_id', 'body']]]);
     }
 
     public function test_user_can_update_own_comment()

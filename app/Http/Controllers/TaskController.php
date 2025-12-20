@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Services\TaskService;
+use App\Traits\ApiResponse;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Response;
 
 /**
  * Class TaskController
@@ -16,11 +16,14 @@ use Illuminate\Support\Facades\Response;
  */
 class TaskController extends Controller
 {
+    use ApiResponse;
+
     /**
      * TaskController constructor.
      */
     public function __construct(
-        protected TaskService $taskService
+        protected TaskService $taskService,
+        protected CacheRepository $cache
     ) {}
 
     /**
@@ -28,13 +31,21 @@ class TaskController extends Controller
      */
     public function index(): JsonResponse
     {
-        $tasks = Cache::remember('tasks:user:'.auth()->id(), 120, function () {
-            return $this->taskService->index();
-        });
+        $userId = auth()->id();
 
-        return Response::success(
+        $tasks = $this->cache->remember(
+            "tasks:user:{$userId}",
+            120,
+            fn () => $this->taskService->index()
+        );
+
+        $data = $tasks->map(
+            fn ($task) => (new TaskResource($task))->toArray(request())
+        );
+
+        return $this->respondSuccess(
             message: __('fetched_successfully'),
-            data: TaskResource::collection($tasks)
+            data: $data
         );
     }
 
@@ -45,32 +56,34 @@ class TaskController extends Controller
     {
         $task = $this->taskService->create($request->validated());
 
-        return Response::success(
+        return $this->respondSuccess(
             message: __('created_successfully'),
-            data: TaskResource::make($task)
+            data: (new TaskResource($task))->toArray(request())
         );
     }
 
     /**
      * Update the specified task.
      */
-    public function update(TaskRequest $request, int $id): JsonResponse
+    public function update(TaskRequest $request, int $taskId): JsonResponse
     {
-        $task = $this->taskService->update($request->validated(), $id);
+        $task = $this->taskService->update($request->validated(), $taskId);
 
-        return Response::success(
+        return $this->respondSuccess(
             message: __('updated_successfully'),
-            data: TaskResource::make($task)
+            data: (new TaskResource($task))->toArray(request())
         );
     }
 
     /**
      * Remove the specified task.
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $taskId): JsonResponse
     {
-        $this->taskService->delete($id);
+        $this->taskService->delete($taskId);
 
-        return Response::success(__('deleted_successfully'));
+        return $this->respondSuccess(
+            message: __('deleted_successfully')
+        );
     }
 }
