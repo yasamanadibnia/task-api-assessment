@@ -12,6 +12,9 @@ class NotificationController extends Controller
         protected NotificationService $service
     ) {}
 
+    /**
+     * fetch user unseen comments.
+     */
     public function unseen(): JsonResponse
     {
         return Response::success(
@@ -19,6 +22,9 @@ class NotificationController extends Controller
         );
     }
 
+    /**
+     * mark user comment as seen.
+     */
     public function markAsSeen(string $id): JsonResponse
     {
         $this->service->markAsSeen($id);

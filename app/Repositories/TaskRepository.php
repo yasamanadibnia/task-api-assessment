@@ -26,7 +26,7 @@ class TaskRepository implements BaseRepository
      */
     public function all(): LengthAwarePaginator
     {
-        return $this->model->where('user_id', auth()->id())->filter()->paginate(10);
+        return $this->model->with(['user','comments'])->filter()->paginate(10);
     }
 
     /**

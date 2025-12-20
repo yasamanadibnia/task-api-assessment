@@ -27,9 +27,10 @@ class TaskRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255', 'min:3'],
-            'description' => ['nullable', 'string', 'max:500'],
+            'description' => ['required', 'string', 'max:500'],
             'status' => ['required', new Enum(TaskStatus::class)],
             'due_date' => ['required', 'date'],
+            'project_id' => ['required', 'exists:projects,id'],
         ];
     }
 }

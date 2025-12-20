@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Enums\NotificationType;
 use App\Repositories\TaskRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -37,16 +36,7 @@ class TaskService
     {
         $data['user_id'] = auth()->id();
 
-        $task = $this->taskRepository->create($data);
-
-        $this->notificationService->notifyTask(
-            user: $task->user,
-            type: NotificationType::TASK_ASSIGNED,
-            taskId: $task->id,
-            message: "You have been assigned task: {$task->title}"
-        );
-
-        return $task;
+        return $this->taskRepository->create($data);
     }
 
     /**
@@ -54,16 +44,7 @@ class TaskService
      */
     public function update(array $data, int $id): Model
     {
-        $task = $this->taskRepository->update($id, $data);
-
-        $this->notificationService->notifyTask(
-            user: $task->user,
-            type: NotificationType::TASK_ASSIGNED,
-            taskId: $task->id,
-            message: "You have been assigned task: {$task->title}"
-        );
-
-        return $task;
+        return $this->taskRepository->update($id, $data);
     }
 
     /**

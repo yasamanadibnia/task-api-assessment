@@ -1,8 +1,10 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Controllers;
 
 use App\Enums\TaskStatus;
+use App\Models\Comment;
+use App\Models\Project;
 use App\Models\Task;
 use App\Notifications\TaskNotification;
 use Illuminate\Support\Facades\Notification;
@@ -15,10 +17,13 @@ class TaskControllerTest extends TestCase
     {
         $user = $this->loginUser();
 
-        Task::factory()->count(15)->create([
+        $tasks = Task::factory()->count(15)->create([
             'user_id' => $user->id,
         ]);
 
+        Comment::factory()->count(10)->create([
+            'task_id' => $tasks->first()->id
+        ]);
         $response = $this->getJson('/api/tasks');
 
         $response
@@ -69,6 +74,7 @@ class TaskControllerTest extends TestCase
             'description' => fake()->paragraph(),
             'status' => TaskStatus::TODO->value,
             'due_date' => now()->addDay()->toDateString(),
+            'project_id' => Project::factory()->create()->id,
         ];
 
         $response = $this->postJson('/api/tasks', $payload);
@@ -117,6 +123,7 @@ class TaskControllerTest extends TestCase
             'status' => TaskStatus::IN_PROGRESS->value,
             'description' => $task->description,
             'due_date' => $task->due_date,
+            'project_id' => $task->project_id,
         ];
 
         $response = $this->putJson(

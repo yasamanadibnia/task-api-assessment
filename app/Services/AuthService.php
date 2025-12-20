@@ -18,7 +18,7 @@ class AuthService
      *
      * @throws ValidationException
      */
-    public function login(array $credentials): array
+    public function login(array $credentials): User
     {
         if (
             ! Auth::attempt([
@@ -33,27 +33,16 @@ class AuthService
 
         $user = $this->authRepository->findByEmail($credentials['email']);
 
-        return $this->buildAuthResponse($user);
+        return $user->setAttribute('token', $user->createToken('api_token')->plainTextToken);
     }
 
     /**
      * register user and give token.
      */
-    public function register(array $data): array
+    public function register(array $data): User
     {
         $user = $this->authRepository->create($data);
 
-        return $this->buildAuthResponse($user);
-    }
-
-    /**
-     * return auth response data.
-     */
-    private function buildAuthResponse(User $user): array
-    {
-        return [
-            'user' => $user,
-            'token' => $user->createToken('api_token')->plainTextToken,
-        ];
+        return $user->setAttribute('token', $user->createToken('api_token')->plainTextToken);
     }
 }

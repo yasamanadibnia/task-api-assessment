@@ -24,8 +24,8 @@ class ProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|min:3',
-            'description' => 'required|min:5',
+            'title' => ['required', 'string', 'min:3', 'max:255'],
+            'description' => ['required', 'min:5', 'max:500'],
         ];
     }
 }

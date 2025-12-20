@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\RoleEnum;
 use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Services\TaskService;
@@ -22,16 +21,14 @@ class TaskController extends Controller
      */
     public function __construct(
         protected TaskService $taskService
-    )
-    {
-    }
+    ) {}
 
     /**
      * Display a listing of user tasks.
      */
     public function index(): JsonResponse
     {
-        $tasks = Cache::remember('tasks:user:' . auth()->id(), 120, function () {
+        $tasks = Cache::remember('tasks:user:'.auth()->id(), 120, function () {
             return $this->taskService->index();
         });
 
