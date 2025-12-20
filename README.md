@@ -1,104 +1,95 @@
-# Senior PHP Backend Developer – Coding Assessment
+# Laravel Ewmateam task api template
 
-Thank you for taking the time to complete this assessment.  
-The goal is to demonstrate how you approach architecture, testing, and backend engineering best practices.
+Example Laravel Task API Template for Ewmateam
 
----
+A well-structured backend demonstrating Service + Repository architecture, design patterns, and Laravel best practices.
 
-## 📖 Project: Collaborative Task Management API
+📝 Developer Notes
 
-### Objective
-Build a REST API for managing projects, tasks, comments, and notifications.  
-We value **clean architecture, thoughtful design, and code quality** over speed or feature quantity.
+For this project, I used PHP 8.2 with Laravel 12 and set up the environment myself using Docker and a custom Dockerfile. The stack includes Redis, MySQL, and Nginx, providing a full-featured development setup.
 
----
+The backend is structured following the Service + Repository architecture, which separates business logic from data access and makes the code more maintainable and testable.
 
-## ✅ Requirements
+I applied several design patterns:
 
-### Core Features
-- **Authentication**: User registration & login (JWT or Laravel Sanctum).
-- **Projects**: CRUD operations. Each project belongs to a user.
-- **Tasks**:
-  - CRUD operations.
-  - Fields: `title, description, status (todo/in-progress/done), due_date`.
-  - Filtering: by status, due date, full-text search.
-  - Pagination for listing.
-- **Comments**: CRUD operations. Each comment belongs to a task.
-- **Notifications**:
-  - Triggered when a task is assigned or updated.
-  - Delivered asynchronously (e.g., queue).
-  - Endpoint for fetching unseen notifications.
+Repository Pattern: To abstract database queries and keep services independent from Eloquent.
 
-### Non-Functional
-- Use a layered architecture (controllers, services, repositories, domain models).
-- Apply at least two meaningful design patterns (e.g., Repository, Strategy, Observer).
-- Database migrations must be included.
-- Cache task listings (e.g., Redis).
-- Add rate limiting for sensitive endpoints.
-- Standardized error handling and responses.
+Strategy Pattern: Applied in the BaseRepository to allow different implementations of query filtering, searching, and pagination depending on the use case.
 
-### Testing
-- Unit tests for core services and repositories.
-- Integration tests for API endpoints.
-- Minimum **70% test coverage**.
+Observer Pattern: Used to handle Task creation and update events, automatically creating notifications for users without cluttering the service logic.
 
-### DevOps
-- `Dockerfile` + `docker-compose.yml` for local setup.
-- CI pipeline runs automatically (tests, static analysis, linting, security).
-- Compatible with **PHP 8.2+**.
+On the Laravel side, I utilized built-in features such as Notifications for async alerts, Scopes for reusable query logic, and Rate Limiting to secure sensitive endpoints.
 
-### Documentation
-- Update this `README.md` to include:
-  - Setup instructions.
-  - Example API requests (curl/Postman).
-  - Explanation of your architectural decisions and trade-offs.
-  - Which design patterns you applied, and why.
+I also wrote unit tests for core services and repositories to ensure correctness and cover edge cases.
 
----
-
-## 🎯 Acceptance Criteria
-
-Your submission will be evaluated on:
-
-- **Architecture & Patterns**: Separation of concerns, justified design patterns.
-- **Code Quality & Standards**: PSR-12 compliance, maintainability.
-- **Feature Completeness**: Requirements implemented.
-- **Testing**: Coverage, meaningful cases, edge-case handling.
-- **Documentation**: Clear and professional.
-- **DevOps**: CI/CD awareness, Docker setup.
-
----
-
-## 📝 Commit Guidelines
-
-We value not only the final code but also how you structure your work.  
-Please use **meaningful, structured commit messages** throughout your development.  
-
-- Follow [Conventional Commits](https://www.conventionalcommits.org/) style when possible:  
-  - `feat:` – for new features  
-  - `fix:` – for bug fixes  
-  - `chore:` – for setup, configuration, or maintenance  
-  - `test:` – for adding or improving tests  
-  - `docs:` – for documentation changes  
-
-- Examples:  
-  - `chore: initial commit (Laravel project setup)`  
-  - `feat: add task CRUD endpoints`  
-  - `fix: correct due date validation logic`  
-
-Your commit history will be reviewed as part of the assessment to understand how you approach iteration, problem-solving, and communication through code.
+Overall, the goal was to build a well-structured, maintainable backend demonstrating thoughtful architecture, proper use of Laravel features, and best practices in testing and deployment.
 
 
-## 📦 Submission Instructions
-1. Implement your solution inside this repo.
-2. Push to a private GitHub repository.
-3. Invite the following reviewers with **Read**  role: `gh-ewmateam`.
-4. Please complete within 7 days of receiving the assignment.
-5. If you need more time, let us know.
+----------
 
-## ℹ️ Notes
-1. The project is designed to take 3–5 hours. We do not expect a production-ready system.
-2. Quality matters more than quantity — partial solutions are acceptable if well-documented.
-3. Document anything you would do differently with more time.
+🚀 Getting started
 
-Good luck, and thank you again for your effort!
+## Installation
+
+Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/11.x/installation)
+
+Clone the repository
+
+    git clone https://github.com/ewmateam/task-api-template.git
+
+Switch to the repo folder
+
+    cd task-api-template
+
+Build and setup docker
+
+     sudo docker compose build --no-cache
+     sudo docker compose up -d
+     sudo docker exec -it api_task_app bash
+
+Install all the dependencies using composer
+
+     composer install
+
+Copy the example env file and make the required configuration changes in the .env file
+
+    cp .env.example .env
+
+Generate a new application key
+
+    php artisan key:generate
+
+Generate database
+
+    php artisan migrate
+
+Testing the local development
+
+    php artisan test
+
+You can now access the server at http://localhost:8000
+
+
+
+# Testing API
+
+The api can now be accessed at
+
+    http://localhost:8000/api
+
+Request headers
+
+| **Required** 	| **Key**              	| **Value**            	 |
+|----------	|------------------	|------------------------|
+| Yes      	| Content-Type     	| application/json 	     |
+| Yes      	| X-Requested-With 	| XMLHttpRequest   	     |
+| Optional 	| Authorization    	| Token {JWT}      	     |
+
+# API Examples
+
+    curl -X POST http://localhost:8080/api/login \  -d 'email=user@example.com&password=secret'
+    curl -X POST http://localhost:8080/api/tasks \  -H "Authorization: Bearer {token}" \-d 'title=New Task&status=todo'
+
+-----------------------------------------------------------
+
+Thank you for reviewing this assessment.

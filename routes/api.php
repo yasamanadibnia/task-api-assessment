@@ -16,11 +16,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('projects', ProjectController::class);
     Route::apiResource('tasks', TaskController::class);
     Route::apiResource('comments', CommentController::class);
-    Route::controller(NotificationController::class)
-        ->prefix('notifications')
-        ->name('notifications.')
-        ->group(function () {
-            Route::get('unseen', 'unseen')->name('unseen');
-            Route::post('{id}/seen', 'markAsSeen')->name('seen');
-        });
+    Route::controller(NotificationController::class)->prefix('notifications')->name('notifications.')->group(function () {
+        Route::get('unseen', 'unseen')->name('unseen');
+        Route::post('{id}/seen', 'markAsSeen')->name('seen');
+    });
 });
