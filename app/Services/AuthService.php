@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Repositories\AuthRepository;
-use Illuminate\Validation\ValidationException;
+use Exception;
 
 class AuthService
 {
@@ -15,7 +15,7 @@ class AuthService
     /**
      * find by email user and give token.
      *
-     * @throws ValidationException
+     * @throws Exception
      */
     public function login(array $credentials): User
     {
@@ -25,7 +25,7 @@ class AuthService
                 'password' => $credentials['password'],
             ])
         ) {
-            throw new \Exception('Invalid email or password'); // simple string
+            throw new Exception('Invalid email or password'); // no backslash needed
         }
 
         $user = $this->authRepository->findByEmail($credentials['email']);
