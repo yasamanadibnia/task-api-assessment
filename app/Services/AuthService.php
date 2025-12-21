@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\User;
 use App\Repositories\AuthRepository;
 use Illuminate\Validation\ValidationException;
-use Mockery\Exception;
 
 class AuthService
 {

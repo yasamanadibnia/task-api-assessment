@@ -125,7 +125,7 @@ curl -X POST http://localhost:8080/api/login \
 
 # register
 curl -X POST http://localhost:8000/api/auth/register \
-  -d 'name=John Doe&email=john@example.com&password=secret&password_confirmation=secret'
+  -d 'name=test&email=user@example.com&password=secret&password_confirmation=secret'
  
 # Create Task
 curl -X POST http://localhost:8080/api/tasks \
