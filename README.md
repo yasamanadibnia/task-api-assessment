@@ -38,7 +38,7 @@ The project uses a **GitHub Actions CI pipeline** designed for coding assessment
 - Enforces **minimum 70% code coverage**, failing builds if not met
 
 ### Static Analysis & Code Style
-- PHPStan (max level) for type and architecture checks
+- PHPStan for type and architecture checks
 - Laravel Pint & PHPCS (PSR-12) for consistent code style
 - Fail-fast policy to maintain code quality
 
@@ -111,11 +111,11 @@ Base API URL: `http://localhost:8000/api`
 
 **Required Request Headers:**
 
-| Required | Key               | Value                    |
-|----------|------------------|--------------------------|
-| Yes      | Content-Type      | application/json         |
-| Yes      | X-Requested-With  | XMLHttpRequest           |
-| Optional | Authorization     | Bearer {JWT}             |
+| Required | Key               | Value            |
+|----------|------------------|------------------|
+| Yes      | Content-Type      | application/json |
+| Yes      | X-Requested-With  | XMLHttpRequest   |
+| Optional | Authorization     | Bearer {token}   |
 
 **Example API Requests:**
 ```bash
