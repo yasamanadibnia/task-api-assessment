@@ -2,9 +2,9 @@ name: Laravel CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   test:
@@ -48,7 +48,8 @@ jobs:
       REDIS_HOST: 127.0.0.1
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -72,13 +73,13 @@ jobs:
       - name: Run tests with coverage
         run: php artisan test --coverage --min=70
 
-      - name: Run phpmd
+      - name: Run PHP Mess Detector (PHPMD)
         run: vendor/bin/phpmd app text cleancode,codesize,controversial,design,naming,unusedcode
 
-      - name: Static analysis
+      - name: Static analysis (PHPStan)
         run: vendor/bin/phpstan analyse app --memory-limit=1G
 
-      - name: Code style
+      - name: Code style check (Pint)
         run: vendor/bin/pint --test
 
       - name: Security audit
