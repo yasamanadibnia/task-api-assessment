@@ -5,7 +5,6 @@ namespace App\Traits;
 use Illuminate\Http\Response as Res;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 
-
 /**
  * Class ApiController
  */
