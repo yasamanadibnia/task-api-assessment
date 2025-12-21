@@ -8,6 +8,8 @@ class CommentResource extends JsonResource
 {
     public function toArray($request): array
     {
+        unset($request);
+
         return [
             'id' => $this->id,
             'task_id' => $this->task_id,

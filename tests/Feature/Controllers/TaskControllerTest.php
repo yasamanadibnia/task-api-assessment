@@ -96,6 +96,7 @@ class TaskControllerTest extends TestCase
             'title' => 'Invalid Task',
             'status' => 'invalid-status',
         ]);
+
         $response->assertJson([
             'status' => 422,
         ]);

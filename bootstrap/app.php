@@ -26,14 +26,13 @@ return Application::configure(basePath: dirname(__DIR__))
             // Check if we have a specific handler for this exception
             if (array_key_exists($className, $handlers)) {
                 $method = $handlers[$className];
-                $apiHandler = new App\Exceptions\ApiExceptionHandler;
+                $handler = app()->make(App\Exceptions\ApiExceptionHandler::class);
 
-                return $apiHandler->$method($e, $request);
+                return $handler->$method($e, $request);
             }
 
             return response()->json([
-                'status' => 'error',
-                'status_code' => $e->getCode() ?: 500,
+                'status' => $e->getCode() ?: 500,
                 'message' => $e->getMessage() ?: 'An unexpected error occurred',
                 'data' => [
                     'type' => basename(get_class($e)),

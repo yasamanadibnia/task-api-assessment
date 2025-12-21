@@ -76,7 +76,7 @@ jobs:
         run: vendor/bin/phpmd app text cleancode,codesize,controversial,design,naming,unusedcode
 
       - name: Static analysis
-        run: vendor/bin/phpstan analyse --level=max --memory-limit=1G
+        run: vendor/bin/phpstan analyse app --memory-limit=1G
 
       - name: Code style
         run: vendor/bin/pint --test

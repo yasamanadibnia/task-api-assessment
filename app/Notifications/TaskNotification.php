@@ -17,12 +17,12 @@ class TaskNotification extends Notification implements ShouldQueue
         public string $message
     ) {}
 
-    public function via($notifiable): array
+    public function via(): array
     {
         return ['database'];
     }
 
-    public function toDatabase($notifiable): array
+    public function toDatabase(): array
     {
         return [
             'type' => $this->type->value,

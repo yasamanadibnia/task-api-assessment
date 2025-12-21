@@ -26,12 +26,7 @@ class AuthService
                 'password' => $credentials['password'],
             ])
         ) {
-            throw new Exception(
-                response: response()->json([
-                    'message' => 'Invalid credentials',
-                    'errors' => ['email' => ['Invalid email or password']],
-                ], 422)
-            );
+            throw new \Exception('Invalid email or password'); // simple string
         }
 
         $user = $this->authRepository->findByEmail($credentials['email']);
