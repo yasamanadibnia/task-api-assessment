@@ -43,9 +43,12 @@ class TaskController extends Controller
             fn ($task) => (new TaskResource($task))->toArray(request())
         );
 
-        return $this->respondSuccess(
-            message: __('fetched_successfully'),
-            data: $data
+        return $this->respondWithPagination(
+            paginate: $data,
+            data: [
+                'items' => $data->items(),
+            ],
+            message: __('fetched_successfully')
         );
     }
 
