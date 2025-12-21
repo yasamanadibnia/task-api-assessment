@@ -39,14 +39,10 @@ class TaskController extends Controller
             fn () => $this->taskService->index()
         );
 
-        $data = $tasks->map(
-            fn ($task) => (new TaskResource($task))->toArray(request())
-        );
-
         return $this->respondWithPagination(
-            paginate: $data,
+            paginate: $tasks,
             data: [
-                'items' => $data->items(),
+                'items' => $tasks->items(),
             ],
             message: __('fetched_successfully')
         );

@@ -51,7 +51,7 @@ class TaskControllerTest extends TestCase
 
         $response->assertJson(
             fn (AssertableJson $json) => $json
-                ->where('data.0.status', TaskStatus::TODO->value)
+                ->where('data.items.0.status', TaskStatus::TODO->value)
                 ->etc()
         );
     }
